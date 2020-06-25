@@ -62,6 +62,7 @@ def main(args=None):
     elif args.command == 'query':
         res = {
             "state": STATE_LABELS[state],
+            "cpu_load": client.cpu_load(),
         }
         #   print("State: {}".format(STATE_LABELS[state]))
         info = client.transport_query()[1]
