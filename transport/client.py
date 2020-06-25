@@ -41,7 +41,9 @@ def main(args=None):
         res = {
             "status": "running",
             "cpu_load": client.cpu_load(),
-            "block_size": client.blocksize
+            "block_size": client.blocksize,
+            "realtime": client.realtime,
+            "sample_rate": client.samplerate,
         }
 
         json.dump(res, sys.stdout, indent=2)
