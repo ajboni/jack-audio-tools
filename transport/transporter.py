@@ -35,7 +35,7 @@ def main(args=None):
         nargs='?',
         default='status',
         choices=['query', 'rewind', 'start',
-                 'status', 'stop', 'toggle', 'check'],
+                 'status', 'stop', 'toggle'],
         help="Transport command")
 
     args = ap.parse_args(args)
@@ -48,11 +48,7 @@ def main(args=None):
     state = client.transport_state
     result = 0
 
-    if args.command == 'check':
-        # If we get this far we are connected to jack.
-        print("running")
-        result = 0
-    elif args.command == 'status':
+    if args.command == 'status':
         if args.verbose:
             print("JACK transport is {}.".format(STATE_LABELS[state]))
         else:
@@ -62,8 +58,6 @@ def main(args=None):
     elif args.command == 'query':
         res = {
             "state": STATE_LABELS[state],
-            "cpu_load": client.cpu_load(),
-            "block_size": client.blocksize
         }
         #   print("State: {}".format(STATE_LABELS[state]))
         info = client.transport_query()[1]
