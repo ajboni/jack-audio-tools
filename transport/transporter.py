@@ -7,7 +7,7 @@
 import argparse
 import string
 import sys
-
+import json
 import jack
 
 
@@ -34,7 +34,8 @@ def main(args=None):
         'command',
         nargs='?',
         default='status',
-        choices=['query', 'rewind', 'start', 'status', 'stop', 'toggle'],
+        choices=['query', 'rewind', 'start',
+                 'status', 'stop', 'toggle', 'check'],
         help="Transport command")
 
     args = ap.parse_args(args)
@@ -47,21 +48,28 @@ def main(args=None):
     state = client.transport_state
     result = 0
 
-    if args.command == 'status':
+    if args.command == 'check':
+        # If we get this far we are connected to jack.
+        print("running")
+        result = 0
+    elif args.command == 'status':
         if args.verbose:
             print("JACK transport is {}.".format(STATE_LABELS[state]))
         else:
             print(STATE_LABELS[state])
-        result = 1 if state == jack.STOPPED else 0
+      #   result = 1 if state == jack.STOPPED else 0
+        result = 0
     elif args.command == 'query':
-        print("State: {}".format(STATE_LABELS[state]))
+        res = {
+            "state": STATE_LABELS[state],
+        }
+        #   print("State: {}".format(STATE_LABELS[state]))
         info = client.transport_query()[1]
-
         for field in sorted(info):
-            label = string.capwords(field.replace('_', ' '))
-            print("{}: {}".format(label, info[field]))
-
-        result = 1 if state == jack.STOPPED else 0
+            res[field] = info[field]
+        json.dump(res, sys.stdout, indent=2)
+      #   result = 1 if state == jack.STOPPED else 0
+        result = 0
     elif args.command == 'start':
         if state == jack.STOPPED:
             client.transport_start()
