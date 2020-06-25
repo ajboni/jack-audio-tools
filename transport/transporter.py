@@ -63,6 +63,7 @@ def main(args=None):
         res = {
             "state": STATE_LABELS[state],
             "cpu_load": client.cpu_load(),
+            "block_size": client.blocksize
         }
         #   print("State: {}".format(STATE_LABELS[state]))
         info = client.transport_query()[1]
