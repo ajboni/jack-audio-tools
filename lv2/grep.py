@@ -45,10 +45,10 @@ def main(args=None):
                     categories = []
                     for cat in node.get_value(world.ns.rdf.type):
                         cat = str(cat)
-                        formatted_cattegory = re.search("#(.+)Plugin$", cat)
+                        formatted_category = re.search("#(.+)Plugin$", cat)
                         if cat is not None:
-                            if formatted_cattegory:
-                                categories.append(formatted_cattegory.group(1))
+                            if formatted_category:
+                                categories.append(formatted_category.group(1))
 
                     plugin_data['categories'] = categories
 
