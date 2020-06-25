@@ -27,6 +27,10 @@ def main(args=None):
         default='transporter',
         help="JACK client name (default: %(default)s)")
     ap.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help="Verbose mode (default: %(default)s)")
+    ap.add_argument(
         'command',
         nargs='?',
         default='status',
@@ -44,7 +48,10 @@ def main(args=None):
     result = 0
 
     if args.command == 'status':
-        print("JACK transport is {}.".format(STATE_LABELS[state]))
+        if args.verbose:
+            print("JACK transport is {}.".format(STATE_LABELS[state]))
+        else:
+            print(STATE_LABELS[state])
         result = 1 if state == jack.STOPPED else 0
     elif args.command == 'query':
         print("State: {}".format(STATE_LABELS[state]))
