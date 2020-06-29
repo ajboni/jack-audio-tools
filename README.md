@@ -1,6 +1,90 @@
 # jack-audio-tools
 
-A collection of utilities and tools for the [JACK] audio ecosystem
+A collection of utilities and tools for the [JACK] audio ecosystem.
+
+
+## JACK Client
+
+### query
+Get several information about JACK instance.
+
+```bash
+python3 client.py query
+```
+
+```JSON
+{
+  "status": "running",
+  "cpu_load": 2.081221580505371,
+  "block_size": 256,
+  "realtime": true,
+  "sample_rate": 44100
+}⏎                         
+```
+
+###  port-info
+Gets the available jack ports.
+
+```bash
+python3 py/jack-audio-tools/jack/client.py port-info
+```
+
+```JSON
+{
+  "all": [
+    "system:capture_1",
+    "system:capture_2",
+    "system:playback_1",
+    "system:playback_2",
+    "system:midi_capture_1",
+    "system:midi_playback_1",
+    "system:midi_capture_2",
+    "system:midi_playback_2",
+    "PulseAudio JACK Sink:front-left",
+    "PulseAudio JACK Sink:front-right",
+    "a2j:Midi Through [14] (capture): Midi Through Port-0",
+    "a2j:Midi Through [14] (playback): Midi Through Port-0",
+    "a2j:STUDIO 2 [20] (capture): STUDIO 2 MIDI 1",
+    "a2j:STUDIO 2 [20] (playback): STUDIO 2 MIDI 1",
+    "PulseAudio JACK Source:front-left",
+    "PulseAudio JACK Source:front-right",
+    "mod-host:midi_in"
+  ],
+  "audio": {
+    "input": [
+      "system:playback_1",
+      "system:playback_2",
+      "PulseAudio JACK Source:front-left",
+      "PulseAudio JACK Source:front-right"
+    ],
+    "output": [
+      "system:capture_1",
+      "system:capture_2",
+      "PulseAudio JACK Sink:front-left",
+      "PulseAudio JACK Sink:front-right"
+    ]
+  },
+  "midi": {
+    "input": [
+      "system:midi_playback_1",
+      "system:midi_playback_2",
+      "a2j:Midi Through [14] (playback): Midi Through Port-0",
+      "a2j:STUDIO 2 [20] (playback): STUDIO 2 MIDI 1",
+      "mod-host:midi_in"
+    ],
+    "output": [
+      "system:midi_capture_1",
+      "system:midi_capture_2",
+      "a2j:Midi Through [14] (capture): Midi Through Port-0",
+      "a2j:STUDIO 2 [20] (capture): STUDIO 2 MIDI 1"
+    ]
+  },
+  "terminal": {
+    "input": [],
+    "output": []
+  }
+}⏎                                                
+```
 
 
 ## JACK Transport
@@ -140,8 +224,8 @@ See the file [LICENSE](./LICENSE) for more information.
 
 
 ## Author
-
-This software is written by *Christopher Arndt*.
+This software was originally written by *Christopher Arndt*.
+Modifications done by *Alexis Boni*
 
 
 [carla]: https://kx.studio/Applications:Carla

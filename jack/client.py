@@ -22,7 +22,7 @@ def main(args=None):
         'command',
         nargs='?',
         default='query',
-        choices=['query'],
+        choices=['query', 'port-info'],
         help="Transport command")
 
     args = ap.parse_args(args)
@@ -45,10 +45,39 @@ def main(args=None):
             "realtime": client.realtime,
             "sample_rate": client.samplerate,
         }
-
         json.dump(res, sys.stdout, indent=2)
         result = 0
+    if args.command == 'port-info':
+        all_ports = client.get_ports('')
+        res = {
+            'all': [],
+            'audio': {
+                'input': [],
+                'output': [],
+            },
+            'midi': {
+                'input': [],
+                'output': [],
+            },
+            'terminal': {
+                'input': [],
+                'output': [],
+            }
+        }
+        for port in all_ports:
+            res['all'].append(port.name)
+            p_direction = "input" if port.is_input else 'output'
+            p_type = ""
+            if port.is_audio:
+                p_type = "audio"
+            elif port.is_midi:
+                p_type = "midi"
+            elif port.is_terminal:
+                p_type = "terminal"
+            res[p_type][p_direction].append(port.name)
+            # print(port.name)
 
+        json.dump(res, sys.stdout, indent=2)
     client.close()
     return result
 
