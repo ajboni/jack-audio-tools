@@ -52,28 +52,29 @@ def main(args=None):
         res = {
             'all': [],
             'audio': {
-                'input': [],
-                'output': [],
+                'playback': [],
+                'capture': [],
             },
             'midi': {
-                'input': [],
-                'output': [],
+                'playback': [],
+                'capture': [],
             },
-            'terminal': {
-                'input': [],
-                'output': [],
-            }
+            # 'terminal': {
+            #     'playback': [],
+            #     'capture': [],
+            # }
         }
         for port in all_ports:
             res['all'].append(port.name)
-            p_direction = "input" if port.is_input else 'output'
+            p_direction = "playback" if port.is_input else 'capture'
+
             p_type = ""
             if port.is_audio:
                 p_type = "audio"
             elif port.is_midi:
                 p_type = "midi"
-            elif port.is_terminal:
-                p_type = "terminal"
+            # elif port.is_terminal:
+            #     p_type = "terminal"
             res[p_type][p_direction].append(port.name)
             # print(port.name)
 
