@@ -6,7 +6,7 @@ This repo is a fork of (jack-audio-tools)[https://github.com/SpotlightKid/jack-a
 # JACK 
 
 ## client
-### query
+### `query`
 Get several information about JACK instance.
 
 ```bash
@@ -23,7 +23,7 @@ python3 client.py query
 }⏎                         
 ```
 
-###  port-info
+###  `port-info`
 Gets the available jack ports.
 
 ```bash
