@@ -1,7 +1,7 @@
 # jack-audio-tools
 
 A collection of utilities and tools for the [JACK] audio ecosystem.
-This repo is a fork of (jack-audio-tools)[https://github.com/SpotlightKid/jack-audio-tools] by [SpotlightKid](https://github.com/SpotlightKid) which was immensely helpful for me to initiate with JACK and python.
+This repo is a fork of [jack-audio-tools](https://github.com/SpotlightKid/jack-audio-tools) by [SpotlightKid](https://github.com/SpotlightKid) which was immensely helpful for me to initiate with JACK and python.
 
 # JACK 
 
