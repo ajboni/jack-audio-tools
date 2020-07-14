@@ -112,6 +112,23 @@ optional arguments:
                         be carried out.
 ```						
 
+## Connect Ports
+```
+usage: connect_ports.py [-h] [-c CLIENT_NAME] [-rm] source destination
+
+Connects/Disconnects two JACK ports.
+
+positional arguments:
+  source                Source port. It must be an output port. It must be same type (audio/midi) as dst)
+  destination           Destination port. It must be an input port. It must be same type (audio/midi) as src
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CLIENT_NAME, --client-name CLIENT_NAME
+                        JACK client name (default: jack_client)
+  -rm, --disconnect, --remove, --rm
+                        Disconnect both ports.
+```
 
 ## JACK Transport
 
