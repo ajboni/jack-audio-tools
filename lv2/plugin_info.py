@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2019 Christopher Arndt
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 #!/usr/bin/env python
 """Generate JSON document with information about a single or all installed LV2 plugins."""
 
@@ -162,14 +184,17 @@ def _get_port_info(ctx, port):
     if psname is None:
         psname = portname[:16]
     elif len(psname) > 16:
-        errors.append("port '%s' short name has more than 16 characters" % portname)
+        errors.append(
+            "port '%s' short name has more than 16 characters" % portname)
 
     # check for old style shortName
     if port.get_value(world.ns.lv2.shortname):
-        errors.append("port '%s' short name is using old style 'shortname' instead of 'shortName'" % portname)
+        errors.append(
+            "port '%s' short name is using old style 'shortname' instead of 'shortName'" % portname)
 
     # port types
-    types = [str(t).rsplit("#", 1)[-1][:-4] for t in port.get_value(world.ns.rdf.type)]
+    types = [str(t).rsplit("#", 1)[-1][:-4]
+             for t in port.get_value(world.ns.rdf.type)]
     buffer_type = port.get_value(world.ns.atom.bufferType)
 
     if ("Atom" in types and port.supports_event(world.ns.midi.MidiEvent) and buffer_type
@@ -183,10 +208,12 @@ def _get_port_info(ctx, port):
     designation = getfirst(port, world.ns.lv2.designation)
 
     # port rangeSteps
-    rangesteps = getfirst(port, world.ns.mod.rangeSteps) or getfirst(port, world.ns.pprops.rangeSteps)
+    rangesteps = getfirst(port, world.ns.mod.rangeSteps) or getfirst(
+        port, world.ns.pprops.rangeSteps)
 
     # port properties
-    properties = sorted([str(t).rsplit("#", 1)[-1] for t in port.get_value(world.ns.lv2.portProperty)])
+    properties = sorted([str(t).rsplit("#", 1)[-1]
+                         for t in port.get_value(world.ns.lv2.portProperty)])
 
     # data
     ranges = {}
@@ -197,7 +224,8 @@ def _get_port_info(ctx, port):
         is_int = "integer" in properties
 
         if is_int and "CV" in types:
-            errors.append("port '%s' has integer property and CV type" % portname)
+            errors.append(
+                "port '%s' has integer property and CV type" % portname)
 
         xdefault, xminimum, xmaximum = port.get_range()
 
@@ -208,9 +236,11 @@ def _get_port_info(ctx, port):
                 else:
                     ranges['minimum'] = float(xminimum)
                     if fmod(ranges['minimum'], 1.0) == 0.0:
-                        warnings.append("port '%s' has integer property but minimum value is float" % portname)
+                        warnings.append(
+                            "port '%s' has integer property but minimum value is float" % portname)
                     else:
-                        errors.append("port '%s' has integer property but minimum value has non-zero decimals" % portname)
+                        errors.append(
+                            "port '%s' has integer property but minimum value has non-zero decimals" % portname)
 
                     ranges['minimum'] = int(ranges['minimum'])
 
@@ -219,28 +249,33 @@ def _get_port_info(ctx, port):
                 else:
                     ranges['maximum'] = float(xmaximum)
                     if fmod(ranges['maximum'], 1.0) == 0.0:
-                        warnings.append("port '%s' has integer property but maximum value is float" % portname)
+                        warnings.append(
+                            "port '%s' has integer property but maximum value is float" % portname)
                     else:
-                        errors.append("port '%s' has integer property but maximum value has non-zero decimals" % portname)
+                        errors.append(
+                            "port '%s' has integer property but maximum value has non-zero decimals" % portname)
 
                     ranges['maximum'] = int(ranges['maximum'])
 
             else:
                 if xminimum.is_int():
-                    warnings.append("port '%s' minimum value is an integer" % portname)
+                    warnings.append(
+                        "port '%s' minimum value is an integer" % portname)
                     ranges['minimum'] = int(xminimum) * 1.0
                 else:
                     ranges['minimum'] = float(xminimum)
 
                 if xmaximum.is_int():
-                    warnings.append("port '%s' maximum value is an integer" % portname)
+                    warnings.append(
+                        "port '%s' maximum value is an integer" % portname)
                     ranges['maximum'] = int(xmaximum) * 1.0
                 else:
                     ranges['maximum'] = float(xmaximum)
 
             if ranges['minimum'] >= ranges['maximum']:
                 ranges['maximum'] = ranges['minimum'] + (1 if is_int else 0.1)
-                errors.append("port '%s' minimum value is equal or higher than its maximum" % portname)
+                errors.append(
+                    "port '%s' minimum value is equal or higher than its maximum" % portname)
 
             if xdefault is not None:
                 if is_int:
@@ -249,13 +284,16 @@ def _get_port_info(ctx, port):
                     else:
                         ranges['default'] = float(xdefault)
                         if fmod(ranges['default'], 1.0) == 0.0:
-                            warnings.append("port '%s' has integer property but default value is float" % portname)
+                            warnings.append(
+                                "port '%s' has integer property but default value is float" % portname)
                         else:
-                            errors.append("port '%s' has integer property but default value has non-zero decimals" % portname)
+                            errors.append(
+                                "port '%s' has integer property but default value has non-zero decimals" % portname)
                         ranges['default'] = int(ranges['default'])
                 else:
                     if xdefault.is_int():
-                        warnings.append("port '%s' default value is an integer" % portname)
+                        warnings.append(
+                            "port '%s' default value is an integer" % portname)
                         ranges['default'] = int(xdefault) * 1.0
                     else:
                         ranges['default'] = float(xdefault)
@@ -269,13 +307,15 @@ def _get_port_info(ctx, port):
 
                 if not (testmin <= ranges['default'] <= testmax):
                     ranges['default'] = ranges['minimum']
-                    errors.append("port '%s' default value is out of bounds" % portname)
+                    errors.append(
+                        "port '%s' default value is out of bounds" % portname)
 
             else:
                 ranges['default'] = ranges['minimum']
 
                 if "Input" in types:
-                    errors.append("port '%s' is missing default value" % portname)
+                    errors.append(
+                        "port '%s' is missing default value" % portname)
 
         else:
             if is_int:
@@ -304,7 +344,8 @@ def _get_port_info(ctx, port):
                     continue
 
                 if value is None:
-                    errors.append("port scalepoint '%s' is missing its value" % label)
+                    errors.append(
+                        "port scalepoint '%s' is missing its value" % label)
                     continue
 
                 if is_int:
@@ -313,13 +354,16 @@ def _get_port_info(ctx, port):
                     else:
                         value = float(value)
                         if fmod(value, 1.0) == 0.0:
-                            warnings.append("port '%s' has integer property but scalepoint '%s' value is float" % (portname, label))
+                            warnings.append(
+                                "port '%s' has integer property but scalepoint '%s' value is float" % (portname, label))
                         else:
-                            errors.append("port '%s' has integer property but scalepoint '%s' value has non-zero decimals" % (portname, label))
+                            errors.append(
+                                "port '%s' has integer property but scalepoint '%s' value has non-zero decimals" % (portname, label))
                         value = int(value)
                 else:
                     if value.is_int():
-                        warnings.append("port '%s' scalepoint '%s' value is an integer" % (portname, label))
+                        warnings.append(
+                            "port '%s' scalepoint '%s' value is an integer" % (portname, label))
                         value = int(value) * 1.0
                     else:
                         value = float(value)
@@ -334,10 +378,12 @@ def _get_port_info(ctx, port):
                 unsorted = dict(s for s in scalepoints_unsorted)
                 values = list(s[0] for s in scalepoints_unsorted)
                 values.sort()
-                scalepoints = list({'value': v, 'label': unsorted[v]} for v in values)
+                scalepoints = list(
+                    {'value': v, 'label': unsorted[v]} for v in values)
 
         if "enumeration" in properties and len(scalepoints) <= 1:
-            errors.append("port '%s' wants to use enumeration but doesn't have enough values" % portname)
+            errors.append(
+                "port '%s' wants to use enumeration but doesn't have enough values" % portname)
             properties.remove("enumeration")
 
     # control ports might contain unit
@@ -355,30 +401,36 @@ def _get_port_info(ctx, port):
                 uuri = uuri.rsplit('#', 1)[-1]
 
                 if uuri not in LV2_UNITS:
-                    errors.append("port '%s' has invalid lv2 unit '%s'" % (portname, uuri))
+                    errors.append(
+                        "port '%s' has invalid lv2 unit '%s'" % (portname, uuri))
                 else:
                     ulabel, urender, usymbol = LV2_UNITS[uuri]
 
             # using custom unit
             else:
-                xlabel  = world.find_nodes(uunit[0], world.ns.rdfs.label, None)
-                xrender = world.find_nodes(uunit[0], world.ns.units.render, None)
-                xsymbol = world.find_nodes(uunit[0], world.ns.units.symbol, None)
+                xlabel = world.find_nodes(uunit[0], world.ns.rdfs.label, None)
+                xrender = world.find_nodes(
+                    uunit[0], world.ns.units.render, None)
+                xsymbol = world.find_nodes(
+                    uunit[0], world.ns.units.symbol, None)
 
                 if xlabel:
                     ulabel = str(xlabel[0])
                 else:
-                    errors.append("port '%s' has custom unit with no label" % portname)
+                    errors.append(
+                        "port '%s' has custom unit with no label" % portname)
 
                 if xrender:
                     urender = str(xrender[0])
                 else:
-                    errors.append("port '%s' has custom unit with no render" % portname)
+                    errors.append(
+                        "port '%s' has custom unit with no render" % portname)
 
                 if xsymbol:
                     usymbol = str(xsymbol[0])
                 else:
-                    errors.append("port '%s' has custom unit with no symbol" % portname)
+                    errors.append(
+                        "port '%s' has custom unit with no symbol" % portname)
 
         if ulabel and urender and usymbol:
             units = {
@@ -431,7 +483,7 @@ def _get_plugin_ports(ctx, plugin):
 
         for typ in [typl.lower() for typl in types]:
             if typ not in ports.keys():
-                ports[typ] = { 'input': [], 'output': [] }
+                ports[typ] = {'input': [], 'output': []}
             ports[typ]["input" if is_input else "output"].append(info)
 
     return ports
@@ -467,7 +519,8 @@ def _get_plugin_properties(ctx, plugin_uri):
                  for node in world.find_nodes(plugin_uri, world.ns.patch.writable, None)]
 
     for prop_uri, is_writable in readable + writeable:
-        prop_node = world.find_nodes(prop_uri, world.ns.rdf.type, world.ns.lv2.Parameter)
+        prop_node = world.find_nodes(
+            prop_uri, world.ns.rdf.type, world.ns.lv2.Parameter)
 
         if not prop_node:
             ctx.errors.append(
@@ -512,7 +565,8 @@ def _get_plugin_info(ctx, plugin):
     if uri is None:
         errors.append("plugin uri is missing or invalid")
     elif str(uri).startswith("file:"):
-        errors.append("plugin uri is local, and thus not suitable for redistribution")
+        errors.append(
+            "plugin uri is local, and thus not suitable for redistribution")
 
     # load all resources in bundle
     world.load_resource(uri)
@@ -605,7 +659,8 @@ def _get_plugin_info(ctx, plugin):
 
     if categories:
         for node in categories:
-            category.update(LV2_CATEGORIES.get(str(node).split('#', 1)[-1], []))
+            category.update(LV2_CATEGORIES.get(
+                str(node).split('#', 1)[-1], []))
 
     # bundles
     bundle = plugin.get_bundle_uri()
@@ -647,7 +702,7 @@ def _get_plugin_info(ctx, plugin):
             'homepage': node2str(author_homepage),
         },
         'bundles': sorted(bundles),
-        #'ui': ui,
+        # 'ui': ui,
         'ports': ports,
         'presets': presets,
         'properties': properties,
