@@ -1,10 +1,11 @@
 # jack-audio-tools
 
 A collection of utilities and tools for the [JACK] audio ecosystem.
+This repo is a fork of (jack-audio-tools)[https://github.com/SpotlightKid/jack-audio-tools] by [SpotlightKid](https://github.com/SpotlightKid) which was immensely helpful for me to initiate with JACK and python.
 
+# JACK 
 
-## JACK Client
-
+## client
 ### query
 Get several information about JACK instance.
 
@@ -85,6 +86,31 @@ python3 py/jack-audio-tools/jack/client.py port-info
   }
 }⏎                                                
 ```
+
+## List Ports
+```
+usage: list_ports.py [-h] [-c CLIENT_NAME] [-p PATTERN] [-a] [-m] [-i] [-o] [-ph] [-mo] [-t]
+
+List all JACK ports.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CLIENT_NAME, --client-name CLIENT_NAME
+                        JACK client name (default: jack_client)
+  -p PATTERN, --pattern PATTERN
+                        A regular expression used to select ports by name. If empty, no selection based on name will be carried out.
+  -a, --is-audio        Select audio/MIDI ports. If neither of them is True, both types of ports are selected. (default: False)
+  -m, --is-midi         Select audio/MIDI ports. If neither of them is True, both types of ports are selected.
+  -i, --is-input        is_input, is_output, is_physical. Select ports by their flags. If none of them are True, no selection based on flags will be carried out.
+  -o, --is-output       is_input, is_output, is_physical, is_terminal, can_monitor Select ports by their flags. If none of them are True, no selection based on flags will
+                        be carried out.
+  -ph, --is-physical    is_input, is_output, is_physical, is_terminal, can_monitor Select ports by their flags. If none of them are True, no selection based on flags will
+                        be carried out.
+  -mo, --can-monitor    is_input, is_output, is_physical, is_terminal, can_monitor. Select ports by their flags. If none of them are True, no selection based on flags
+                        will be carried out.
+  -t, --is-terminal     is_input, is_output, is_physical, is_terminal, can_monitor Select ports by their flags. If none of them are True, no selection based on flags will
+                        be carried out.
+```						
 
 
 ## JACK Transport
